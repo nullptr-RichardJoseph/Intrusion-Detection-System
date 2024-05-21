@@ -1,29 +1,24 @@
 # Module for network monitoring 
 from scapy.all import sniff, IP , TCP
-from network.analysis import analyze_packet
+from network.analysis import analyze_packet, detect_port_scan
+
+is_sniffing= True
 
 def packet_callback(packet):
-    if IP in packet:
-        ip_src=packet[IP].src
-        ip_dst= packet[IP].dst
-        if TCP in packet:
-            tcp_sport= packet[TCP].sport
-            tcp_dport=packet[TCP].dport
+    # Analyze Packet
+    analyze_packet(packet)
+    detect_port_scan(packet)
 
-            # Print information about all TCP packets
-            print(f"[+] TCP Packet: {ip_src}:{tcp_sport} -> {ip_dst}:{tcp_dport}")
-            
-            # Check if the packet is HTTP traffic (port 80)
-            #uncomment if you want real time packet information
-            if tcp_dport == 80 or tcp_sport == 80:
-                print(f"[+] HTTP Packet: {ip_src}:{tcp_sport} -> {ip_dst}:{tcp_dport}")
-            
-            # Analyze Packet
-            analyze_packet(packet)
+def start_sniffing(interface, callback=packet_callback):
+    global is_sniffing
+    is_sniffing= True
+    print(f"Starting packet capture on interface {interface}")
+    def stop_sniffer(packet):
+        return not is_sniffing
+    sniff(iface=interface, prn=callback, store=False, stop_filter=stop_sniffer)
 
-def start_sniffing(interface):
-    print(f"[*] Starting packet capture on interface {interface}")
-    try:
-        sniff(iface=interface, prn=packet_callback, store=False)
-    except Exception as e:
-        print(f"[!] Error starting sniffing: {e}")
+def stop_sniffing():
+    global is_sniffer
+    print("Stopping packet capture")
+    is_sniffing= False
+        
