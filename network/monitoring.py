@@ -2,6 +2,7 @@
 from scapy.all import sniff, IP , TCP
 from network.analysis import analyze_packet, detect_port_scan
 
+
 is_sniffing= True
 
 def packet_callback(packet):
@@ -21,4 +22,4 @@ def stop_sniffing():
     global is_sniffer
     print("Stopping packet capture")
     is_sniffing= False
-        
+
