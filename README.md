@@ -4,11 +4,9 @@ An Intrusion Detection System (IDS) application implemented in Python.
 
 ## Features
 
-- Real-time network monitoring
-- Anomaly detection
-- Signature-based detection
-- Behavior-based detection
-- Protocol analysis
+- Real-time network monitoring/ Protocol analysis
+- Signature-based detection (Snort Community rules)
+- Threat intel Integration (Alienvault OTX)
 - Alert generation and notification
 
 ## Installation
